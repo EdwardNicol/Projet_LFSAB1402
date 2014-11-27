@@ -22,9 +22,22 @@ local Mix Interprete Projet CWD in
          Audio
       end
 
-      % Interprete doit interpréter une partition
       fun {Interprete Partition}
-         nil
+	 case Partition.1
+	 of H|T then %suite de partition
+	    [] nil then %fin de suite de partition / partition
+	    
+	 [] N then% note
+	 [] N|O then% note + octave
+	 [] N#O then% note alteree + octave
+
+	 [] muet(P) then P % transformation: muet
+	 [] duree(secondes:F P) then F % transformation: duree
+	 [] etirer(facteur:F P) then F % transformation: etirer
+	 [] bourdon(note:N P) then N % transformation: bourdon
+	 [] transposer(demitons:E P) then E % transformation: transposer
+	 else nil
+	 end
       end
    end
 
