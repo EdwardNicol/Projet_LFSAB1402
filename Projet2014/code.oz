@@ -29,15 +29,45 @@ local Mix Interprete Projet CWD in
 	    
 	 [] N then% note
 	    case N
-	    of 'a0'
-	    [] 'a0'
-	    [] 'a0'
-	    [] 'a0'
-	    [] 'a0'
-	    [] 'a0'
-	    [] 'a0'
-	    [] 'a0'
+	    of 'a0' then
+	    [] 'b0' then
+	    [] 'c0' then
+	    [] 'd0' then
+	    [] 'e0' then
+	    [] 'f0' then
+	    [] 'g0' then
+	       
+	    [] 'a1' then
+	    [] 'b1' then
+	    [] 'c1' then
+	    [] 'd1' then
+	    [] 'e1' then
+	    [] 'f1' then
+	    [] 'g1' then
 
+	    [] 'a2' then
+	    [] 'b2' then
+	    [] 'c2' then
+	    [] 'd2' then
+	    [] 'e2' then
+	    [] 'f2' then
+	    [] 'g2' then
+
+	    [] 'a3' then
+	    [] 'b3' then
+	    [] 'c3' then
+	    [] 'd3' then
+	    [] 'e3' then
+	    [] 'f3' then
+	    [] 'g3' then
+
+	    [] 'a4' then
+	    [] 'b4' then
+	    [] 'c4' then
+	    [] 'd4' then
+	    [] 'e4' then
+	    [] 'f4' then
+	    [] 'g4' then
 	       
 	 [] N#O then% note alteree
 
