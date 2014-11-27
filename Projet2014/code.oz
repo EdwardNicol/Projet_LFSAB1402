@@ -36,45 +36,57 @@ local Mix Interprete Projet CWD in
 	       else Note %Ne modifie pas la partition 'Note' s'il n'est pas une note
 	       end
 	    end
-	 in
-	    Temp = {ToNote Partition.1}
-
-	    case Temp
-	    of H|T then %suite de partition
-	    [] nil then nil %fin de suite de partition / partition
-
-	    []note(nom:Nom octave:Octave alteration:alt) then
-	       case alt
-	       of none then
-		  case Nom
-		  of 'a' then echantillon(hauteur:440 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
-		  [] 'b' then echantillon(hauteur:494 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
-		  [] 'c' then echantillon(hauteur:262 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
-		  [] 'd' then echantillon(hauteur:294 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
-		  [] 'e' then echantillon(hauteur:330 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
-		  [] 'f' then echantillon(hauteur:349 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
-		  [] 'g' then echantillon(hauteur:392 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
-		  end
-
-	       [] '#' then
-		  case Nom
-		  of 'a' then echantillon(hauteur:466 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
-		  [] 'b' then echantillon(hauteur:523 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}% B# = C !!
-		  [] 'c' then echantillon(hauteur:277 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
-		  [] 'd' then echantillon(hauteur:311 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
-		  [] 'e' then echantillon(hauteur:349 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}% E# = F !!
-		  [] 'f' then echantillon(hauteur:370 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
-		  [] 'g' then echantillon(hauteur:415 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
-		  end
+	    fun{InterpreteList L Acc}% renvoie les éléments d'une 
+	       case L
+	       of nil then Acc
+	       [] H1|T1 then {IntepreteList T1 Acc|{Interprete H1}}
 	       end
+	 in
+	    if Partition==nil then nil %fin de suite de partitions / partition
+	    else
 	       
+	       Temp = {ToNote Partition.1}
 	       
-	    [] muet(P) then P % transformation: muet
-	    [] duree(secondes:F P) then F % transformation: duree
-	    [] etirer(facteur:F P) then F % transformation: etirer
-	    [] bourdon(note:N P) then N % transformation: bourdon
-	    [] transposer(demitons:E P) then E % transformation: transposer
-	    else nil
+	       case Temp
+	       of H|T then %suite de partitions
+		  {InterpreteList T H}|{Interprete Partition.2}
+		  
+	       []note(nom:Nom octave:Octave alteration:alt) then
+		  case alt
+		  of none then
+		     case Nom
+		     of 'a' then echantillon(hauteur:440 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		     [] 'b' then echantillon(hauteur:494 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		     [] 'c' then echantillon(hauteur:262 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		     [] 'd' then echantillon(hauteur:294 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		     [] 'e' then echantillon(hauteur:330 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		     [] 'f' then echantillon(hauteur:349 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		     [] 'g' then echantillon(hauteur:392 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		     [] 'silence' then echantillon(hauteur:0 duree:1.0 instrument:none)|{Interprete Partition.2}
+		     end
+		     
+		  [] '#' then
+		     case Nom
+		     of 'a' then echantillon(hauteur:466 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		     [] 'b' then echantillon(hauteur:523 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}% B# = C !!
+		     [] 'c' then echantillon(hauteur:277 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		     [] 'd' then echantillon(hauteur:311 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		     [] 'e' then echantillon(hauteur:349 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}% E# = F !!
+		     [] 'f' then echantillon(hauteur:370 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		     [] 'g' then echantillon(hauteur:415 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		     end
+		  end
+		  
+		  
+	       [] muet(P) then % transformation: muet
+		  bourdon(note:silence P)
+	       [] duree(secondes:F P) then F % transformation: duree
+	       [] etirer(facteur:Fact Partoche) then % transformation: etirer
+	       [] bourdon(note:N P) then % transformation: bourdon
+		  
+	       [] transposer(demitons:E P) then E % transformation: transposer
+	       else nil
+	       end
 	    end
 	 end
       end
