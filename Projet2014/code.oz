@@ -23,60 +23,39 @@ local Mix Interprete Projet CWD in
       end
 
       fun {Interprete Partition}
-	 case Partition.1
-	 of H|T then %suite de partition
-	 [] nil then %fin de suite de partition / partition
-	    
-	 [] N then% note
-	    case N
-	    of 'a0' then
-	    [] 'b0' then
-	    [] 'c0' then
-	    [] 'd0' then
-	    [] 'e0' then
-	    [] 'f0' then
-	    [] 'g0' then
+	 local
+	    Temp
+	    fun{ToNote Note}
+	       case Note
+	       of Nom#Octave then note(nom:Nom octave:Octave alteration:'#')
+	       [] Atom then
+		  case {AtomToString Atom}
+		  of [N] then note(nom:Atom octave:4 alteration:none)
+		  [] [N O] then note(nom:{StringToAtom [N]} octave:{StringToInt [O]} alteration:none)
+		  end
+	       else Note %Ne modifie pas la partition 'Note' s'il n'est pas une note
+	       end
+	    end
+	 in
+	    Temp = {ToNote Partition.1}
+
+	    case Temp
+	    of H|T then %suite de partition
+	    [] nil then %fin de suite de partition / partition
+
+	    []note(nom:Nom octave:Octave alteration:alt) then
+	       case alt
+	       of none
+	       [] '#'
 	       
-	    [] 'a1' then
-	    [] 'b1' then
-	    [] 'c1' then
-	    [] 'd1' then
-	    [] 'e1' then
-	    [] 'f1' then
-	    [] 'g1' then
-
-	    [] 'a2' then
-	    [] 'b2' then
-	    [] 'c2' then
-	    [] 'd2' then
-	    [] 'e2' then
-	    [] 'f2' then
-	    [] 'g2' then
-
-	    [] 'a3' then
-	    [] 'b3' then
-	    [] 'c3' then
-	    [] 'd3' then
-	    [] 'e3' then
-	    [] 'f3' then
-	    [] 'g3' then
-
-	    [] 'a4' then
-	    [] 'b4' then
-	    [] 'c4' then
-	    [] 'd4' then
-	    [] 'e4' then
-	    [] 'f4' then
-	    [] 'g4' then
 	       
-	 [] N#O then% note alteree
-
-	 [] muet(P) then P % transformation: muet
-	 [] duree(secondes:F P) then F % transformation: duree
-	 [] etirer(facteur:F P) then F % transformation: etirer
-	 [] bourdon(note:N P) then N % transformation: bourdon
-	 [] transposer(demitons:E P) then E % transformation: transposer
-	 else nil
+	    [] muet(P) then P % transformation: muet
+	    [] duree(secondes:F P) then F % transformation: duree
+	    [] etirer(facteur:F P) then F % transformation: etirer
+	    [] bourdon(note:N P) then N % transformation: bourdon
+	    [] transposer(demitons:E P) then E % transformation: transposer
+	    else nil
+	    end
 	 end
       end
    end
