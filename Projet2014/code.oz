@@ -25,11 +25,21 @@ local Mix Interprete Projet CWD in
       fun {Interprete Partition}
 	 case Partition.1
 	 of H|T then %suite de partition
-	    [] nil then %fin de suite de partition / partition
+	 [] nil then %fin de suite de partition / partition
 	    
 	 [] N then% note
-	 [] N|O then% note + octave
-	 [] N#O then% note alteree + octave
+	    case N
+	    of 'a0'
+	    [] 'a0'
+	    [] 'a0'
+	    [] 'a0'
+	    [] 'a0'
+	    [] 'a0'
+	    [] 'a0'
+	    [] 'a0'
+
+	       
+	 [] N#O then% note alteree
 
 	 [] muet(P) then P % transformation: muet
 	 [] duree(secondes:F P) then F % transformation: duree
