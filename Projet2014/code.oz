@@ -25,7 +25,7 @@ local Mix Interprete Projet CWD in
       fun {Interprete Partition}
 	 local
 	    Temp
-	    fun{ToNote Note}
+	    fun{ToNote Note}%Transforme tous les formats que peu prendre <note> en un format standard
 	       case Note
 	       of Nom#Octave then note(nom:Nom octave:Octave alteration:'#')
 	       [] Atom then
@@ -41,12 +41,32 @@ local Mix Interprete Projet CWD in
 
 	    case Temp
 	    of H|T then %suite de partition
-	    [] nil then %fin de suite de partition / partition
+	    [] nil then nil %fin de suite de partition / partition
 
 	    []note(nom:Nom octave:Octave alteration:alt) then
 	       case alt
-	       of none
-	       [] '#'
+	       of none then
+		  case Nom
+		  of 'a' then echantillon(hauteur:440 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		  [] 'b' then echantillon(hauteur:494 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		  [] 'c' then echantillon(hauteur:262 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		  [] 'd' then echantillon(hauteur:294 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		  [] 'e' then echantillon(hauteur:330 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		  [] 'f' then echantillon(hauteur:349 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		  [] 'g' then echantillon(hauteur:392 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		  end
+
+	       [] '#' then
+		  case Nom
+		  of 'a' then echantillon(hauteur:466 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		  [] 'b' then echantillon(hauteur:523 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}% B# = C !!
+		  [] 'c' then echantillon(hauteur:277 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		  [] 'd' then echantillon(hauteur:311 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		  [] 'e' then echantillon(hauteur:349 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}% E# = F !!
+		  [] 'f' then echantillon(hauteur:370 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		  [] 'g' then echantillon(hauteur:415 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
+		  end
+	       end
 	       
 	       
 	    [] muet(P) then P % transformation: muet
