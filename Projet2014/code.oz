@@ -2,11 +2,8 @@
 local Mix Interprete Projet CWD in
    % CWD contient le chemin complet vers le dossier contenant le fichier 'code.oz'
    % modifiez sa valeur pour correspondre à votre système.
-   CWD = {Property.condGet 'testcwd' '/home/layus/ucl/fsab1402/2014-2015/projet_2014/src/'}
+   CWD = {Property.condGet 'testcwd' '/Users/Ed/GitHub/Projet_LFSAB1402/Projet2014/'}
 
-   % Si vous utilisez Mozart 1.4, remplacez la ligne précédente par celle-ci :
-   % [Projet] = {Link ['Projet2014_mozart1.4.ozf']}
-   %
    % Projet fournit quatre fonctions :
    % {Projet.run Interprete Mix Music 'out.wav'} = ok OR error(...) 
    % {Projet.readFile FileName} = AudioVector OR error(...)
