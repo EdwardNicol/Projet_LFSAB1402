@@ -42,7 +42,7 @@ local Mix Interprete Projet CWD in
 	       of nil then Acc % Fin de partition
 	       [] H|T then % Cas ou la partition est une liste de partitions
 		  case {ToNote H}
-		  of note(nom:Nom octave:Octave alteration:Alt) then {CountNotes T Acc+1}
+		  of note(nom:Nom octave:Octave alteration:Alt) then {CountNotes T Acc+1.0}
 		  [] muet(P) then {CounNotes T Acc+{CountNotes P}}
 		  [] bourdon(note:N P) then {CounNotes T Acc+{CountNotes P}}
 		  [] etirer (facteur:F P) then {CounNotes T Acc+{CountNotes P}}
@@ -51,7 +51,7 @@ local Mix Interprete Projet CWD in
 		  end
 	       [] Mono then % Cas ou la partition ne comporte qu'un seul élément
 		  case {ToNote Mono}
-		  of note(nom:Nom octave:Octave alteration:Alt) then Acc+1
+		  of note(nom:Nom octave:Octave alteration:Alt) then Acc+1.0
 		  [] muet(P) then Acc+{CountNotes P}
 		  [] bourdon(note:N P) then Acc+{CountNotes P}
 		  [] etirer (facteur:F P) then Acc+{CountNotes P}
@@ -100,8 +100,14 @@ local Mix Interprete Projet CWD in
 			[] bourdon(note:N P) then {SuperInterprete P N Facteur Transposer}|{SuperInterprete T Bourdon Facteur Transposer}
 			[] etirer(facteur:F P) then {SuperInterprete P Bourdon F Transposer}|{SuperInterprete T Bourdon Facteur Transposer}
 			[] transpose(demitons:D P) then {SuperInterprete P Bourdon Facteur D}|{SuperInterprete T Bourdon Facteur Transposer}
-			   
-
+			[] duree(secondes:S P) then
+			   local Temps in
+			      Temps=seconds/{CountNotes P 0.0}
+			      {SuperInterprete P Bourdon Temps Transposer}|{SuperInterprete T Bourdon Facteur Transposer}
+			   end
+			end
+		     end
+		     
 
 	       
 	 end
