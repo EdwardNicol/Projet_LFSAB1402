@@ -50,27 +50,27 @@ local Mix Interprete Projet CWD in
 			   of none then
 			      case Nom
 			      of 'a' then echantillon(hauteur:0-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|{SuperInterprete T Bourdon Facteur Transposer}
-			      [] 'b' then echantillon(hauteur:2-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|
-			      [] 'c' then echantillon(hauteur:~9-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|
-			      [] 'd' then echantillon(hauteur:~7-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|
-			      [] 'e' then echantillon(hauteur:~5-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|
-			      [] 'f' then echantillon(hauteur:~4-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|
-			      [] 'g' then echantillon(hauteur:~2-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|
-			      [] 'silence' then silence(duree:1.0*Facteur)|
+			      [] 'b' then echantillon(hauteur:2-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|{SuperInterprete T Bourdon Facteur Transposer}
+			      [] 'c' then echantillon(hauteur:~9-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|{SuperInterprete T Bourdon Facteur Transposer}
+			      [] 'd' then echantillon(hauteur:~7-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|{SuperInterprete T Bourdon Facteur Transposer}
+			      [] 'e' then echantillon(hauteur:~5-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|{SuperInterprete T Bourdon Facteur Transposer}
+			      [] 'f' then echantillon(hauteur:~4-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|{SuperInterprete T Bourdon Facteur Transposer}
+			      [] 'g' then echantillon(hauteur:~2-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|{SuperInterprete T Bourdon Facteur Transposer}
+			      [] 'silence' then silence(duree:1.0*Facteur)|{SuperInterprete T Bourdon Facteur Transposer}
 			      end
 			      
 			   [] '#' then
 			      case Nom
-			      of 'a' then echantillon(hauteur:1-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|
-			      [] 'b' then echantillon(hauteur:3-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|% B# = C5 !!
-			      [] 'c' then echantillon(hauteur:~8-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|
-			      [] 'd' then echantillon(hauteur:~6-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|
-			      [] 'e' then echantillon(hauteur:~4-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|% E# = F !!
-			      [] 'f' then echantillon(hauteur:~3-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|
-			      [] 'g' then echantillon(hauteur:~1-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|
+			      of 'a' then echantillon(hauteur:1-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|{SuperInterprete T Bourdon Facteur Transposer}
+			      [] 'b' then echantillon(hauteur:3-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|{SuperInterprete T Bourdon Facteur Transposer}% B# = C5 !!
+			      [] 'c' then echantillon(hauteur:~8-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|{SuperInterprete T Bourdon Facteur Transposer}
+			      [] 'd' then echantillon(hauteur:~6-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|{SuperInterprete T Bourdon Facteur Transposer}
+			      [] 'e' then echantillon(hauteur:~4-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|{SuperInterprete T Bourdon Facteur Transposer}% E# = F !!
+			      [] 'f' then echantillon(hauteur:~3-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|{SuperInterprete T Bourdon Facteur Transposer}
+			      [] 'g' then echantillon(hauteur:~1-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|{SuperInterprete T Bourdon Facteur Transposer}
 			      end
 			   end
-
+			[] 
 
 
 	       
