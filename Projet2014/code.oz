@@ -37,12 +37,30 @@ local Mix Interprete Projet CWD in
 	       end
 	    end
 
-	    fun{CountNotes Partition Acc}%Compte le nombre de notes dans une partition
+	    fun{CountNotes Partition Acc} % Compte le nombre de notes dans une partition
 	       case {Flatten Partition}
-	       of nil then Acc
-	       [] H|T then
+	       of nil then Acc % Fin de partition
+	       [] H|T then % Cas ou la partition est une liste de partitions
 		  case {ToNote H}
-		     of 
+		  of note(nom:Nom octave:Octave alteration:Alt) then {CountNotes T Acc+1}
+		  [] muet(P) then {CounNotes T Acc+{CountNotes P}}
+		  [] bourdon(note:N P) then {CounNotes T Acc+{CountNotes P}}
+		  [] etirer (facteur:F P) then {CounNotes T Acc+{CountNotes P}}
+		  [] transpose(demitons:D P) then {CounNotes T Acc+{CountNotes P}}
+		  [] duree(secondes:F P) then {CounNotes T Acc+{CountNotes P}}
+		  end
+	       [] Mono then % Cas ou la partition ne comporte qu'un seul élément
+		  case {ToNote Mono}
+		  of note(nom:Nom octave:Octave alteration:Alt) then Acc+1
+		  [] muet(P) then Acc+{CountNotes P}
+		  [] bourdon(note:N P) then Acc+{CountNotes P}
+		  [] etirer (facteur:F P) then Acc+{CountNotes P}
+		  [] transpose(demitons:D P) then Acc+{CountNotes P}
+		  [] duree(secondes:F P) then Acc+{CountNotes P}
+		  end
+	       end
+	    end
+		     
 	    
 	 in
 	    local
