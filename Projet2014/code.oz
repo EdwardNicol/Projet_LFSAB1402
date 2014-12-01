@@ -36,6 +36,13 @@ local Mix Interprete Projet CWD in
 	       else Note %Ne modifie pas la partition 'Note' s'il n'est pas une note
 	       end
 	    end
+
+	    fun{CountNotes Partition Acc}%Compte le nombre de notes dans une partition
+	       case {Flatten Partition}
+	       of nil then Acc
+	       [] H|T then
+		  case {ToNote H}
+		     of 
 	    
 	 in
 	    local
@@ -70,7 +77,12 @@ local Mix Interprete Projet CWD in
 			      [] 'g' then echantillon(hauteur:~1-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|{SuperInterprete T Bourdon Facteur Transposer}
 			      end
 			   end
-			[] 
+
+			[] muet(P) then {SuperInterprete P silence Facteur Transposer}|{SuperInterprete T Bourdon Facteur Transposer}
+			[] bourdon(note:N P) then {SuperInterprete P N Facteur Transposer}|{SuperInterprete T Bourdon Facteur Transposer}
+			[] etirer(facteur:F P) then {SuperInterprete P Bourdon F Transposer}|{SuperInterprete T Bourdon Facteur Transposer}
+			[] transpose(demitons:D P) then {SuperInterprete P Bourdon Facteur D}|{SuperInterprete T Bourdon Facteur Transposer}
+			   
 
 
 	       
