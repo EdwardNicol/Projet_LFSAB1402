@@ -41,7 +41,7 @@ local Mix Interprete Projet CWD in
 	    local
 	       fun {SuperInterprete Partition Bourdon Facteur Transposer}
 		  if Bourdon == nil then
-		     case Partition
+		     case {Flatten Partition}
 		     of nil then nil% cas d'une liste de partitions vide
 		     [] H|T then % cas d'une liste de partitions
 			case {ToNote H}
@@ -49,25 +49,25 @@ local Mix Interprete Projet CWD in
 			   case Alt
 			   of none then
 			      case Nom
-			      of 'a' then echantillon(hauteur:440 div (2*(4-Octave)) duree:1.0*Facteur instrument:none)|{SuperInterprete Partition.2 Bourdon Facteur}
-			      [] 'b' then echantillon(hauteur:494 div (2*(4-Octave)) duree:1.0*Facteur instrument:none)|
-			      [] 'c' then echantillon(hauteur:262 div (2*(4-Octave)) duree:1.0*Facteur instrument:none)|
-			      [] 'd' then echantillon(hauteur:294 div (2*(4-Octave)) duree:1.0*Facteur instrument:none)|
-			      [] 'e' then echantillon(hauteur:330 div (2*(4-Octave)) duree:1.0*Facteur instrument:none)|
-			      [] 'f' then echantillon(hauteur:349 div (2*(4-Octave)) duree:1.0*Facteur instrument:none)|
-			      [] 'g' then echantillon(hauteur:392 div (2*(4-Octave)) duree:1.0*Facteur instrument:none)|
-			      [] 'silence' then echantillon(hauteur:0 duree:1.0*Facteur instrument:none)|
+			      of 'a' then echantillon(hauteur:0-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|{SuperInterprete T Bourdon Facteur Transposer}
+			      [] 'b' then echantillon(hauteur:2-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|
+			      [] 'c' then echantillon(hauteur:~9-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|
+			      [] 'd' then echantillon(hauteur:~7-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|
+			      [] 'e' then echantillon(hauteur:~5-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|
+			      [] 'f' then echantillon(hauteur:~4-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|
+			      [] 'g' then echantillon(hauteur:~2-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|
+			      [] 'silence' then silence(duree:1.0*Facteur)|
 			      end
 			      
 			   [] '#' then
 			      case Nom
-			      of 'a' then echantillon(hauteur:466 div (2*(4-Octave)) duree:1.0*Facteur instrument:none)|
-			      [] 'b' then echantillon(hauteur:523 div (2*(4-Octave)) duree:1.0*Facteur instrument:none)|% B# = C !!
-			      [] 'c' then echantillon(hauteur:277 div (2*(4-Octave)) duree:1.0*Facteur instrument:none)|
-			      [] 'd' then echantillon(hauteur:311 div (2*(4-Octave)) duree:1.0*Facteur instrument:none)|
-			      [] 'e' then echantillon(hauteur:349 div (2*(4-Octave)) duree:1.0*Facteur instrument:none)|% E# = F !!
-			      [] 'f' then echantillon(hauteur:370 div (2*(4-Octave)) duree:1.0*Facteur instrument:none)|
-			      [] 'g' then echantillon(hauteur:415 div (2*(4-Octave)) duree:1.0*Facteur instrument:none)|
+			      of 'a' then echantillon(hauteur:1-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|
+			      [] 'b' then echantillon(hauteur:3-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|% B# = C5 !!
+			      [] 'c' then echantillon(hauteur:~8-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|
+			      [] 'd' then echantillon(hauteur:~6-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|
+			      [] 'e' then echantillon(hauteur:~4-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|% E# = F !!
+			      [] 'f' then echantillon(hauteur:~3-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|
+			      [] 'g' then echantillon(hauteur:~1-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)|
 			      end
 			   end
 
