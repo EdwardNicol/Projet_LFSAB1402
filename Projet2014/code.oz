@@ -25,6 +25,7 @@ local Mix Interprete Projet CWD in
       fun {Interprete Partition}
 	 local
 	    Temp
+
 	    fun{ToNote Note}%Transforme tous les formats que peu prendre <note> en un format standard
 	       case Note
 	       of Nom#Octave then note(nom:Nom octave:Octave alteration:'#')
@@ -36,11 +37,15 @@ local Mix Interprete Projet CWD in
 	       else Note %Ne modifie pas la partition 'Note' s'il n'est pas une note
 	       end
 	    end
-	    fun{InterpreteList L Acc}% renvoie les éléments d'une 
+
+	    fun{InterpreteList L Acc}% renvoie les éléments d'une liste de partitions, interprétés et hors d'une liste
 	       case L
 	       of nil then Acc
 	       [] H1|T1 then {IntepreteList T1 Acc|{Interprete H1}}
 	       end
+	    end
+
+	    fun{InterpreteBourdon L }
 	 in
 	    if Partition==nil then nil %fin de suite de partitions / partition
 	    else
@@ -51,8 +56,8 @@ local Mix Interprete Projet CWD in
 	       of H|T then %suite de partitions
 		  {InterpreteList T H}|{Interprete Partition.2}
 		  
-	       []note(nom:Nom octave:Octave alteration:alt) then
-		  case alt
+	       []note(nom:Nom octave:Octave alteration:Alt) then
+		  case Alt
 		  of none then
 		     case Nom
 		     of 'a' then echantillon(hauteur:440 div (2*(4-Octave)) duree:1.0 instrument:none)|{Interprete Partition.2}
@@ -83,7 +88,11 @@ local Mix Interprete Projet CWD in
 	       [] duree(secondes:F P) then F % transformation: duree
 	       [] etirer(facteur:Fact Partoche) then % transformation: etirer
 	       [] bourdon(note:N P) then % transformation: bourdon
-		  
+		  if P==nil then nil
+		  else
+		     case {ToNote P.1}
+		     of note(nom:Nom octave:Octave alteration:Alt) then {Interprete N}|{Interprete bourdon(note:N P.2)}
+			[] H|T then 
 	       [] transposer(demitons:E P) then E % transformation: transposer
 	       else nil
 	       end
