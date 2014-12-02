@@ -65,7 +65,9 @@ local Mix Interprete Projet CWD in
 	 in
 	    local
 	       fun {SuperInterprete Partition Bourdon Facteur Transposer}
+
 		  if Bourdon == nil then
+
 		     case {Flatten Partition}
 		     of nil then nil% cas d'une liste de partitions vide
 		     [] H|T then % cas d'une liste de partitions
@@ -106,7 +108,48 @@ local Mix Interprete Projet CWD in
 			      {SuperInterprete P Bourdon Temps Transposer}|{SuperInterprete T Bourdon Facteur Transposer}
 			   end
 			end
+
+
+		     [] Mono then % Cas ou la partition n'est pas une liste de partitions
+			case {ToNote Mono}
+			of note(nom:Nom octave:Octave alteration:Alt) then
+			   case Alt
+			   of none then
+			      case Nom
+			      of 'a' then echantillon(hauteur:0-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)
+			      [] 'b' then echantillon(hauteur:2-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)
+			      [] 'c' then echantillon(hauteur:~9-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)
+			      [] 'd' then echantillon(hauteur:~7-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)
+			      [] 'e' then echantillon(hauteur:~5-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)
+			      [] 'f' then echantillon(hauteur:~4-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)
+			      [] 'g' then echantillon(hauteur:~2-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)
+			      [] 'silence' then silence(duree:1.0*Facteur)
+			      end
+			      
+			   [] '#' then
+			      case Nom
+			      of 'a' then echantillon(hauteur:1-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)
+			      [] 'b' then echantillon(hauteur:3-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)% B# = C5 !!
+			      [] 'c' then echantillon(hauteur:~8-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)
+			      [] 'd' then echantillon(hauteur:~6-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)
+			      [] 'e' then echantillon(hauteur:~4-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)% E# = F !!
+			      [] 'f' then echantillon(hauteur:~3-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)
+			      [] 'g' then echantillon(hauteur:~1-(12*(4-Octave))+Transposer duree:1.0*Facteur instrument:none)
+			      end
+			   end
+
+			[] muet(P) then {SuperInterprete P silence Facteur Transposer}
+			[] bourdon(note:N P) then {SuperInterprete P N Facteur Transposer}
+			[] etirer(facteur:F P) then {SuperInterprete P Bourdon F Transposer}
+			[] transpose(demitons:D P) then {SuperInterprete P Bourdon Facteur D}
+			[] duree(secondes:S P) then
+			   local Temps in
+			      Temps=seconds/{CountNotes P 0.0}
+			      {SuperInterprete P Bourdon Temps Transposer}
+			   end
+			end	   
 		     end
+		  else
 		     
 
 	       
