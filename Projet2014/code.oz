@@ -172,9 +172,11 @@ local Mix Interprete Projet CWD in
 			else % Mono est donc une note (a remplacer par bourdon)
 			   {GetEchantillon {ToNote Bourdon} Facteur Transposer}
 			end	   
-		     end % end de case dans bourdon
+		     end
 		  end
 	       end
+	    in
+	       {Flatten {SuperInterprete Partition nil 1.0 0}}
 	    end
 	 end
       end
