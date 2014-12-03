@@ -25,10 +25,10 @@ fun{Mix Interprete Music}
 	             end
 	          {Append {VecteurAudio nil C} {Mix Interprete B}}
 	       end
-       [] transformation then
+       [] transformation then % WTF?
             {Mix Interprete {Interprete transformation}}|{Mix Interprete T}
-       [] partition then
-	    {Mix Interprete {Interprete partition}}|{Mix Interprete T}     
+       [] partition(P) then
+	    {Mix Interprete {Interprete P}}|{Mix Interprete T}     
        [] note(nom:Nom octave:Octave alteration:Alt) then
             {Mix Interprete {Interprete note}}|{Mix Interprete T}
        [] wave(Nom) then
@@ -65,12 +65,16 @@ fun{Mix Interprete Music}
 	     
        [] renverser(Music) then
              {Reverse {Mix Interprete Music}}
-       [] echo(delai:S Music) then
-             nil
-       [] echo(delai:S decadence:F Music) then
-             nil
-       [] echo(delai:S decadence:F repetition:N Music) then
-             nil
+       [] echo(delai:Del Music) then
+             {Mix Interprete merge([0.5#M 0.5[voix([silence(duree:Del)]) M]])}|{Mix Interprete T}
+       [] echo(delai:Del decadence:Dec Music) then
+		local X Y in
+		   X = 1.0/(1.0+Dec)
+		   Y = X*Dec
+		   {Mix Interprete merge(X#M Y#[voix([silence(duree:Del)]) M])}|{Mix Interprete T}
+		end
+       [] echo(delai:Del decadence:Dec repetition:Rep Music) then
+             
        [] fondu(ouverture:S1 fermeture:S2 Music) then
              nil
        [] fondu_enchaine(duree:S Music1 Music2) then
