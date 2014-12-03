@@ -65,16 +65,37 @@ fun{Mix Interprete Music}
 	     
        [] renverser(Music) then
              {Reverse {Mix Interprete Music}}
-       [] echo(delai:Del Music) then
+       [] echo(delai:Del M) then
              {Mix Interprete merge([0.5#M 0.5[voix([silence(duree:Del)]) M]])}|{Mix Interprete T}
-       [] echo(delai:Del decadence:Dec Music) then
+       [] echo(delai:Del decadence:Dec M) then
 		local X Y in
 		   X = 1.0/(1.0+Dec)
 		   Y = X*Dec
 		   {Mix Interprete merge(X#M Y#[voix([silence(duree:Del)]) M])}|{Mix Interprete T}
 		end
-       [] echo(delai:Del decadence:Dec repetition:Rep Music) then
-             
+       [] echo(delai:Del decadence:Dec repetition:Rep M) then
+		local
+		   fun {SubEcho Delai Decadence Intensite Nombre Iteration M Acc}
+		      if Iteration > N then {Reverse Acc}
+		      elseif Iteration == 0 then
+			 {SubEcho Delai Decadence Intensite*Decadence Nombre-1 Iteration+1 M Intensite#M|Acc}
+		      else
+			 {SubEcho Delai Decadence Intensite*Decadence Nombre-1 Iteration+1 M Intensite#[voix([silence(duree:Delai*Iteration)]) M]|Acc}
+		      end
+		   end
+
+		  fun {CalcIntensite Dec N Acc}
+		     if N==0 then Acc
+		     else
+			{CalcIntensite Dec N-1 Acc*Dec+1.0}
+		     end
+		  end
+		in
+		   local X in
+		      X = {CalcIntensite Dec Rep 1.0}
+		      {SubEcho Del Dec X Rep M nil}
+		   end
+		end
        [] fondu(ouverture:S1 fermeture:S2 Music) then
              nil
        [] fondu_enchaine(duree:S Music1 Music2) then
