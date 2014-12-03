@@ -42,21 +42,21 @@ local Mix Interprete Projet CWD in
 	       of nil then Acc % Fin de partition
 	       [] H|T then % Cas ou la partition est une liste de partitions
 		  case H
-		  of muet(P) then {CounNotes T Acc+{CountNotes P}}
-		  [] bourdon(note:N P) then {CounNotes T Acc+{CountNotes P}}
-		  [] etirer (facteur:F P) then {CounNotes T Acc+{CountNotes P}}
-		  [] transpose(demitons:D P) then {CounNotes T Acc+{CountNotes P}}
-		  [] duree(secondes:F P) then {CounNotes T Acc+{CountNotes P}}
+		  of muet(P) then {CountNotes T Acc+{CountNotes P 0}}
+		  [] bourdon(note:N P) then {CountNotes T Acc+{CountNotes P 0}}
+		  [] etirer(facteur:F P) then {CountNotes T Acc+{CountNotes P 0}}
+		  [] transpose(demitons:D P) then {CountNotes T Acc+{CountNotes P 0}}
+		  [] duree(secondes:F P) then {CountNotes T Acc+{CountNotes P 0}}
 		  else
 		     {CountNotes T Acc+1.0}
 		  end
 	       [] Mono then % Cas ou la partition ne comporte qu'un seul élément
 		  case Mono
-		  of muet(P) then Acc+{CountNotes P}
-		  [] bourdon(note:N P) then Acc+{CountNotes P}
-		  [] etirer (facteur:F P) then Acc+{CountNotes P}
-		  [] transpose(demitons:D P) then Acc+{CountNotes P}
-		  [] duree(secondes:F P) then Acc+{CountNotes P}
+		  of muet(P) then Acc+{CountNotes P 0}
+		  [] bourdon(note:N P) then Acc+{CountNotes P 0}
+		  [] etirer(facteur:F P) then Acc+{CountNotes P 0}
+		  [] transpose(demitons:D P) then Acc+{CountNotes P 0}
+		  [] duree(secondes:F P) then Acc+{CountNotes P 0}
 		  else
 		     Acc+1.0
 		  end
@@ -103,22 +103,10 @@ local Mix Interprete Projet CWD in
 		     case {Flatten Partition}
 		     of nil then nil% cas d'une liste de partitions vide
 		     [] H|T then % cas d'une liste de partitions
-			case H
-			of muet(P) then {SuperInterprete P silence Facteur Transposer}|{SuperInterprete T Bourdon Facteur Transposer}
-			[] bourdon(note:N P) then {SuperInterprete P N Facteur Transposer}|{SuperInterprete T Bourdon Facteur Transposer}
-			[] etirer(facteur:F P) then {SuperInterprete P Bourdon F Transposer}|{SuperInterprete T Bourdon Facteur Transposer}
-			[] transpose(demitons:D P) then {SuperInterprete P Bourdon Facteur D}|{SuperInterprete T Bourdon Facteur Transposer}
-			[] duree(secondes:S P) then
-			   local Temps in
-			      Temps=S/{CountNotes P 0.0}
-			      {SuperInterprete P Bourdon Temps Transposer}|{SuperInterprete T Bourdon Facteur Transposer}
-			   end
-			else % H est donc une note
-			   {GetEchantillon {ToNote H} Facteur Transposer}|{SuperInterprete T Bourdon Facteur Transposer}
-			end
+			{SuperInterprete H Bourdon Facteur Transposer}|{SuperInterprete T Bourdon Facteur Transposer}
 
 
-		     [] Mono then % Cas ou la partition n'est pas une liste de partitions
+		     [] Mono then % Cas ou la partition n'est pas une liste de partitions (note ou transformation unique)
 			case Mono
 			of muet(P) then {SuperInterprete P silence Facteur Transposer}
 			[] bourdon(note:N P) then {SuperInterprete P N Facteur Transposer}
@@ -131,7 +119,7 @@ local Mix Interprete Projet CWD in
 			   end
 
 			else % Mono est donc une note
-			   {GetEchantillon {ToNote H} Facteur Transposer}
+			   {GetEchantillon Mono Facteur Transposer}
 			end	   
 		     end
 
@@ -140,22 +128,7 @@ local Mix Interprete Projet CWD in
 		     case{Flatten Partition}
 		     of nil then nil
 		     [] H|T then
-			case H
-			of muet(P) then {SuperInterprete P silence Facteur Transposer}|{SuperInterprete T Bourdon Facteur Transposer}
-			[] bourdon(note:N P) then {SuperInterprete P N Facteur Transposer}|{SuperInterprete T Bourdon Facteur Transposer}
-			[] etirer(facteur:F P) then {SuperInterprete P Bourdon F Transposer}|{SuperInterprete T Bourdon Facteur Transposer}
-			[] transpose(demitons:D P) then {SuperInterprete P Bourdon Facteur D}|{SuperInterprete T Bourdon Facteur Transposer}
-			[] duree(secondes:S P) then
-			   local Temps in
-			      Temps=S/{CountNotes P 0.0}
-			      {SuperInterprete P Bourdon Temps Transposer}|{SuperInterprete T Bourdon Facteur Transposer}
-			   end
-
-
-			else % H est donc une note (a remplacer par Bourdon)
-			   {GetEchantillon {ToNote Bourdon} Facteur Transposer}|{SuperInterprete T Bourdon Facteur Transposer}		   	       
-			end
-
+			{SuperInterprete H Bourdon Facteur Transposer}|{SuperInterprete T Bourdon Facteur Transposer}
 
 		     [] Mono then % Cas ou la partition n'est pas une liste de partitions
 			case Mono
@@ -170,7 +143,7 @@ local Mix Interprete Projet CWD in
 			   end
 
 			else % Mono est donc une note (a remplacer par bourdon)
-			   {GetEchantillon {ToNote Bourdon} Facteur Transposer}
+			   {GetEchantillon Bourdon Facteur Transposer}
 			end	   
 		     end
 		  end
@@ -178,6 +151,25 @@ local Mix Interprete Projet CWD in
 	    in
 	       {Flatten {SuperInterprete Partition nil 1.0 0}}
 	    end
+	 end
+      end
+      local
+	 Tune = [b b c5 d5 d5 c5 b a g g a b]
+	 End1 = [etirer(facteur:1.5 b) etirer(facteur:0.5 a) etirer(facteur:2.0 a)]
+	 End2 = [etirer(facteur:1.5 a) etirer(facteur:0.5 g) etirer(facteur:2.0 g)]
+	 Interlude = [a a b g a etirer(facteur:0.5 [b c5])
+		      b g a etirer(facteur:0.5 [b c5])
+		      b a g a etirer(facteur:2.0 d) ]
+
+   % Ceci n'est pas une musique
+	 Partition = [Tune End1 Tune End2 Interlude Tune End2]
+      in
+   % Ceci est une musique :-)
+	 {Browse {Flatten Partition}}
+      
+	 local L in
+	    L = [partition(Partition)]
+	    {Browse {Interprete L.1.1}}
 	 end
       end
    end
