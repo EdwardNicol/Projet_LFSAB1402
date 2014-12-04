@@ -25,9 +25,9 @@ local Mix Interprete Projet CWD in
 	       case V
 	       of A|B then
 		  case A
-		  of silence(duree:s) then
+		  of silence(duree:S) then
 		     local VecteurSilence C in %On définit la fonction VecteurSilence qui crée un vecteur remplis de 0
-			C=silence.duree*44100.0
+			C=S*44100.0
 
 			fun{VecteurSilence Acc1 Acc2}
 			   if Acc2==0 then Acc1
@@ -35,7 +35,7 @@ local Mix Interprete Projet CWD in
 			   end
 			end
 		   
-			{Append {VecteurSilence nil C} {Mix Interprete B}}
+			{Append {VecteurSilence nil C} {Mix Interprete B}}|{Mix Interprete T}
 		   
 		     end
 		
@@ -48,17 +48,45 @@ local Mix Interprete Projet CWD in
 			   else {VecteurAudio 0.5*{Float.sin 2.0*3.1415*440.0*Acc2*{Pow 2.0 D/12.0}/C}|Acc1 Acc2-1.0}
 			   end
 			end  
-			{Append {VecteurAudio nil C} {Mix Interprete B}}
+			{Append {VecteurAudio nil C} {Mix Interprete B}}|{Mix Interprete T}
+		     end
+		  end
+	       [] Mono then
+		  case Mono
+		  of silence(duree:S) then
+		     local VecteurSilence C in %On définit la fonction VecteurSilence qui crée un vecteur remplis de 0
+			C=S*44100.0
+
+			fun{VecteurSilence Acc1 Acc2}
+			   if Acc2==0 then Acc1
+			   else {VecteurSilence 0.0|Acc1 Acc2-1.0} %Création d'un vecteur remplis de 0
+			   end
+			end
+		   
+			{VecteurSilence nil C}|{Mix Interprete T}
+		   
+		     end
+		
+		  []echantillon(hauteur:H duree:S instrument:none) then 
+		     local VecteurAudio C D in %On définit la fonction VecteurAudio qui crée un vecteur audio
+			C=S*44100.0
+			D={IntToFloat H}
+			fun{VecteurAudio Acc1 Acc2}
+			   if Acc2==0.0 then Acc1
+			   else {VecteurAudio 0.5*{Float.sin 2.0*3.1415*440.0*Acc2*{Pow 2.0 D/12.0}/C}|Acc1 Acc2-1.0}
+			   end
+			end  
+			{VecteurAudio nil C}|{Mix Interprete T}
 		     end
 		  end
 	       end
 
 
-	    [] partition(P) then %Idem pour partition
-	       {Mix Interprete {Interprete P}}|{Mix Interprete T}     
+	    [] partition(P) then %On utilise la fonction interprete sur une partition pour renvoyer une voix qui sera ensuite traitee par un appel recursif
+	       {Mix Interprete [voix({Interprete P})]}|{Mix Interprete T}     
 
 
-	    [] wave(Nom) then %Une fonction spécifique a été donnée pour gérer ce genre de fichier wave, il suffit de l'ulitilser sans l'implèmenter
+	    [] wave(Nom) then %Une fonction spécifique a ete donnee pour gerer ce genre de fichier wave, il suffit de l'ulitilser sans l'implementer
 	       {Projet.readFile Nom}|{Mix Interprete T}
 
 
@@ -227,7 +255,33 @@ local Mix Interprete Projet CWD in
 		  end
 		  {Merge LMusic}
 	       end
-	    end  	    
+	    [] silence(duree:S) then
+	       local VecteurSilence C in %On définit la fonction VecteurSilence qui crée un vecteur remplis de 0
+		  C=S*44100.0
+		  
+		  fun{VecteurSilence Acc1 Acc2}
+		     if Acc2==0 then Acc1
+		     else {VecteurSilence 0.0|Acc1 Acc2-1.0} %Création d'un vecteur remplis de 0
+		     end
+		  end
+		  
+		  {VecteurSilence nil C}|{Mix Interprete T}
+		  
+	       end
+	       
+	    []echantillon(hauteur:H duree:S instrument:none) then 
+	       local VecteurAudio C D in %On définit la fonction VecteurAudio qui crée un vecteur audio
+		  C=S*44100.0
+		  D={IntToFloat H}
+		  fun{VecteurAudio Acc1 Acc2}
+		     if Acc2==0.0 then Acc1
+		     else {VecteurAudio 0.5*{Float.sin 2.0*3.1415*440.0*Acc2*{Pow 2.0 D/12.0}/C}|Acc1 Acc2-1.0}
+		     end
+		  end  
+		  {VecteurAudio nil C}|{Mix Interprete T}
+	       end
+	    end
+	    
 	 end
       end
 
@@ -367,7 +421,7 @@ local Mix Interprete Projet CWD in
 		  end
 	       end
 	    in
-	       [voix({Flatten {SuperInterprete Partition nil 1.0 0}})]
+	       {Flatten {SuperInterprete Partition nil 1.0 0}}
 	    end
 	 end
       end
@@ -382,7 +436,7 @@ local Mix Interprete Projet CWD in
       %
       % Si votre code devait ne pas passer nos tests, cet exemple serait le
       % seul qui ateste de la validité de votre implémentation.
-      {Browse {Interprete Music.1.1}}
+      
       {Browse {Projet.run Mix Interprete Music CWD#'out.wav'}}
    end
 end
