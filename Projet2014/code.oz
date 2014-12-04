@@ -93,6 +93,7 @@ local Mix Interprete Projet CWD in
 		     else {Mcm L.2 Acc|H}%Effectué en dernier si la valeure est supérieure à H, alors la valeure est remplacée par H
 		     end
 		  end
+		  {Mcm L nil}
 	       end
 	 
 
@@ -100,20 +101,20 @@ local Mix Interprete Projet CWD in
 	       {Reverse {Mix Interprete Music}}
 
 
-	    [] echo(delai:S Music) then 
+	    [] echo(delai:Del M) then 
 	       {Mix Interprete [merge([0.5#M 0.5#[voix([silence(duree:Del)]) M]])]}|{Mix Interprete T}
 
-	    [] echo(delai:S decadence:F Music) then
+	    [] echo(delai:Del decadence:Dec M) then
 	       local X Y in
 		  X = 1.0/(1.0+Dec)
 		  Y = X*Dec
 		  {Mix Interprete [merge([X#M Y#[voix([silence(duree:Del)]) M]])]}|{Mix Interprete T}
 	       end
 
-	    [] echo(delai:S decadence:F repetition:N Music) then
+	    [] echo(delai:Del decadence:Dec repetition:Rep M) then
 	       local
 		  fun {SubEcho Delai Decadence Intensite Nombre Iteration M Acc}
-		     if Iteration > N then {Reverse Acc}
+		     if Iteration > Nombre then {Reverse Acc}
 		     elseif Iteration == 0 then
 			{SubEcho Delai Decadence Intensite*Decadence Nombre-1 Iteration+1 M Intensite#M|Acc}
 		     else
@@ -130,13 +131,13 @@ local Mix Interprete Projet CWD in
 	       in
 		  local X in
 		     X = {CalcIntensite Dec Rep 1.0}
-		     {Mix Interprete [merge({SubEcho Del Dec X Rep M nil})]}|{Mix Interprete T}
+		     {Mix Interprete [merge({SubEcho Del Dec X Rep 0 M nil})]}|{Mix Interprete T}
 		  end
 	       end
 	     
 
 	    [] fondu(ouverture:S1 fermeture:S2 Music) then %Retourne un vecteur audio avec une partie "adoucie" entre S1 et S2
-	       local L Fondu in
+	       local L Fondu Dur1 Dur2 in
 		  L={Mix Interprete Music}
 		  Dur1=S1*44100.0
 		  Dur2=S2*44100.0
@@ -147,7 +148,7 @@ local Mix Interprete Projet CWD in
 		     else {Fondu L.2 AccOuv AccFer {Length L}/Dur2|Return}%Addouci la fin du vecteur
 		     end
 		  end
-		  {Fondu L S1*44100 S1*44100 S2*44100 S2*44100 nil}
+		  {Fondu L S1*44100.0 S2*44100.0 nil}
 	       end	
 
 	    [] fondu_enchaine(duree:Sec Musique1 Musique2) then
@@ -164,7 +165,7 @@ local Mix Interprete Projet CWD in
 		     if {And {Or Ouverture*44100.0>{IntToFloat {Length Musique}} Ouverture==0.0} {Or Fermeture*44100.0>{IntToFloat {Length Musique}} Fermeture==0.0}}
 		     then Musique
 		     else
-			{Inter {RenverserVec {Inter {RenverserVec Musique} Fermeture 1}} Ouverture 1}
+			{Inter {Reverse {Inter {Reverse Musique} Fermeture 1}} Ouverture 1}
 		     end
 		  end
 	      
@@ -196,10 +197,11 @@ local Mix Interprete Projet CWD in
 		  fun{Cut L A B Acc}
 		     if B==0 then {Reverse Acc}
 		     elseif A=<0 andthen L==nil then {Cut L A-1 B-1 0|Acc} 
-		     elseif A=<0 {Cut L.2 A-1 B-1 L.1|Acc}
+		     elseif A=<0 then {Cut L.2 A-1 B-1 L.1|Acc}
 		     elseif A>0 then {Cut L.2 A-1 B-1 Acc}
 		     end
 		  end
+		  {Cut L A B nil}
 	       end	     
 
 
@@ -219,7 +221,7 @@ local Mix Interprete Projet CWD in
 			local X Y in
 			   X = {Map {Mix Interprete Music} fun{$ N} Intensite*N end}
 			   Y = {Merge T}
-			   {Sum A B nil}
+			   {Sum X Y nil}
 			end
 		     end
 		  end
