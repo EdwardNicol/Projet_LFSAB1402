@@ -44,8 +44,8 @@ local Mix Interprete Projet CWD in
 			C=S*44100.0
 			D={IntToFloat H}
 			fun{VecteurAudio Acc1 Acc2}
-			   if Acc2==0 then Acc1
-			   else {VecteurAudio 0.5*{Float.sin 2.0*3.1415*440.0*Acc2*{Float.pow 2.0 D/12}/C}|Acc1 Acc2-1}
+			   if Acc2==0.0 then Acc1
+			   else {VecteurAudio 0.5*{Float.sin 2.0*3.1415*440.0*Acc2*{Pow 2.0 D/12.0}/C}|Acc1 Acc2-1.0}
 			   end
 			end  
 			{Append {VecteurAudio nil C} {Mix Interprete B}}
