@@ -367,7 +367,7 @@ local Mix Interprete Projet CWD in
 		  end
 	       end
 	    in
-	       {Flatten {SuperInterprete Partition nil 1.0 0}}
+	       [voix({Flatten {SuperInterprete Partition nil 1.0 0}})]
 	    end
 	 end
       end
