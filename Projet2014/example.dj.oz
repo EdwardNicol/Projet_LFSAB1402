@@ -9,16 +9,16 @@ local
    Ending11 = [etirer(facteur:Tiers [silence e g#4 b]) etirer(facteur:Dtiers c) etirer(facteur:Tiers [silence e e5 d#5])]
    Ending12 = [etirer(facteur:Tiers [silence e d5 b])]
    Ending21 = [etirer(facteur:Qtiers a)]
-   Ending22 = [etirer(facteur:DTiers a)]
-   Pont = [etirer(fact:Tiers [silence b c5 d5]) e etirer(fact:Tiers [g f5 e5]) d etirer(fact:Tiers [f e5 d5]) c etirer(fact:Tiers [e d5 c5]) etirer(fact:Dtiers b) etirer(fact:Tiers [e e e5 e e5 e5 e6 d#5])]
-   Ending23 = [etirer(facteur:Dtiers a) etier(facteur:Tiers [b c5 d5])]
+   Ending22 = [etirer(facteur:Dtiers a)]
+   Pont = [etirer(facteur:Tiers [silence b c5 d5]) e etirer(facteur:Tiers [g f5 e5]) d etirer(facteur:Tiers [f e5 d5]) c etirer(facteur:Tiers [e d5 c5]) etirer(facteur:Dtiers b) etirer(facteur:Tiers [e e e5 e e5 e5 e6 d#5])]
+   Ending23 = [etirer(facteur:Dtiers a) etirer(facteur:Tiers [b c5 d5])]
    Ending24 = [etirer(facteur:2.0 a)] % Ending maison
 
    Elise = [Start Corps Ending11 Corps Ending12 Ending21
-		Start Corps Ending11 Corps Ending12 Ending22
-		Pont Start Start Start
-		Start Corps Ending11 Corps Ending12 Ending23
-		Corps Ending11 Corps Ending12 Ending24]
+	    Start Corps Ending11 Corps Ending12 Ending22
+	    Pont Start Start Start
+	    Start Corps Ending11 Corps Ending12 Ending23
+	    Corps Ending11 Corps Ending12 Ending24]
 in
-   [partition([Elise])]
+   [partition(Elise)]
 end

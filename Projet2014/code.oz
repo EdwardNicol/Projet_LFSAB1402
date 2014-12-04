@@ -1,7 +1,4 @@
-% Vous ne pouvez pas utiliser le mot-clé 'declare'.
 local Mix Interprete Projet CWD in
-   % CWD contient le chemin complet vers le dossier contenant le fichier 'code.oz'
-   % modifiez sa valeur pour correspondre à votre système.
    CWD = {Property.condGet 'testcwd' '/Users/Ed/GitHub/Projet_LFSAB1402/Projet2014/'}
 
    % Projet fournit quatre fonctions :
@@ -37,29 +34,35 @@ local Mix Interprete Projet CWD in
 	       end
 	    end
 
-	    fun{CountNotes Partition Acc} % Compte le nombre de notes dans une partition
-	       case {Flatten Partition}
-	       of nil then Acc % Fin de partition
-	       [] H|T then % Cas ou la partition est une liste de partitions
-		  case H
-		  of muet(P) then {CountNotes T Acc+{CountNotes P 0}}
-		  [] bourdon(note:N P) then {CountNotes T Acc+{CountNotes P 0}}
-		  [] etirer(facteur:F P) then {CountNotes T Acc+{CountNotes P 0}}
-		  [] transpose(demitons:D P) then {CountNotes T Acc+{CountNotes P 0}}
-		  [] duree(secondes:F P) then {CountNotes T Acc+{CountNotes P 0}}
-		  else
-		     {CountNotes T Acc+1.0}
+	    fun{CountNotes Partition}% Compte le nombre de notes dans une partition
+	       local
+		  fun {SubCountNotes Partition Acc}
+		     case {Flatten Partition}
+		     of nil then Acc % Fin de partition
+		     [] H|T then % Cas ou la partition est une liste de partitions
+			case H
+			of muet(P) then {SubCountNotes T Acc+{SubCountNotes P 0.0}}
+			[] bourdon(note:N P) then {SubCountNotes T Acc+{SubCountNotes P 0.0}}
+			[] etirer(facteur:F P) then {SubCountNotes T Acc+{SubCountNotes P 0.0}}
+			[] transpose(demitons:D P) then {SubCountNotes T Acc+{SubCountNotes P 0.0}}
+			[] duree(secondes:F P) then {SubCountNotes T Acc+{SubCountNotes P 0.0}}
+			else
+			   {SubCountNotes T Acc+1.0}
+			end
+		     [] Mono then % Cas ou la partition ne comporte qu'un seul élément
+			case Mono
+			of muet(P) then Acc+{SubCountNotes P 0.0}
+			[] bourdon(note:N P) then Acc+{SubCountNotes P 0.0}
+			[] etirer(facteur:F P) then Acc+{SubCountNotes P 0.0}
+			[] transpose(demitons:D P) then Acc+{SubCountNotes P 0.0}
+			[] duree(secondes:F P) then Acc+{SubCountNotes P 0.0}
+			else
+			   Acc+1.0
+			end
+		     end
 		  end
-	       [] Mono then % Cas ou la partition ne comporte qu'un seul élément
-		  case Mono
-		  of muet(P) then Acc+{CountNotes P 0}
-		  [] bourdon(note:N P) then Acc+{CountNotes P 0}
-		  [] etirer(facteur:F P) then Acc+{CountNotes P 0}
-		  [] transpose(demitons:D P) then Acc+{CountNotes P 0}
-		  [] duree(secondes:F P) then Acc+{CountNotes P 0}
-		  else
-		     Acc+1.0
-		  end
+	       in
+		  {SubCountNotes Partition 0.0}
 	       end
 	    end
 
@@ -114,7 +117,7 @@ local Mix Interprete Projet CWD in
 			[] transpose(demitons:D P) then {SuperInterprete P Bourdon Facteur D}
 			[] duree(secondes:S P) then
 			   local Temps in
-			      Temps=S/{CountNotes P 0.0}
+			      Temps=S/{CountNotes P}
 			      {SuperInterprete P Bourdon Temps Transposer}
 			   end
 
@@ -138,7 +141,7 @@ local Mix Interprete Projet CWD in
 			[] transpose(demitons:D P) then {SuperInterprete P Bourdon Facteur D}
 			[] duree(secondes:S P) then
 			   local Temps in
-			      Temps=S/{CountNotes P 0.0}
+			      Temps=S/{CountNotes P}
 			      {SuperInterprete P Bourdon Temps Transposer}
 			   end
 
@@ -153,29 +156,10 @@ local Mix Interprete Projet CWD in
 	    end
 	 end
       end
-      local
-	 Tune = [b b c5 d5 d5 c5 b a g g a b]
-	 End1 = [etirer(facteur:1.5 b) etirer(facteur:0.5 a) etirer(facteur:2.0 a)]
-	 End2 = [etirer(facteur:1.5 a) etirer(facteur:0.5 g) etirer(facteur:2.0 g)]
-	 Interlude = [a a b g a etirer(facteur:0.5 [b c5])
-		      b g a etirer(facteur:0.5 [b c5])
-		      b a g a etirer(facteur:2.0 d) ]
-
-   % Ceci n'est pas une musique
-	 Partition = [Tune End1 Tune End2 Interlude Tune End2]
-      in
-   % Ceci est une musique :-)
-	 {Browse {Flatten Partition}}
-      
-	 local L in
-	    L = [partition(Partition)]
-	    {Browse {Interprete L.1.1}}
-	 end
-      end
    end
 
    local 
-      Music = {Projet.load CWD#'joie.dj.oz'}
+      Music = {Projet.load CWD#'example.dj.oz'}
    in
       % Votre code DOIT appeler Projet.run UNE SEULE fois.  Lors de cet appel,
       % vous devez mixer une musique qui démontre les fonctionalités de votre
@@ -183,6 +167,7 @@ local Mix Interprete Projet CWD in
       %
       % Si votre code devait ne pas passer nos tests, cet exemple serait le
       % seul qui ateste de la validité de votre implémentation.
+      {Browse {Interprete Music.1.1}}
       {Browse {Projet.run Mix Interprete Music CWD#'out.wav'}}
    end
 end
