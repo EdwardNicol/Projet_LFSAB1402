@@ -35,7 +35,7 @@ local Mix Interprete Projet CWD in
 			   end
 			end
 		   
-			{Append {VecteurSilence nil C} {Mix Interprete B}}|{Mix Interprete T}
+			{Flatten {Append {VecteurSilence nil C} {Mix Interprete B}}|{Mix Interprete T}}
 		   
 		     end
 		
@@ -44,11 +44,11 @@ local Mix Interprete Projet CWD in
 			C=S*44100.0
 			D={IntToFloat H}
 			fun{VecteurAudio Acc1 Acc2}
-			   if Acc2==0.0 then Acc1
-			   else {VecteurAudio 0.5*{Float.sin 2.0*3.1415*440.0*Acc2*{Pow 2.0 D/12.0}/C}|Acc1 Acc2-1.0}
+			   if Acc2==0.0 then {Reverse Acc1}
+			   else {VecteurAudio Acc1|0.5*{Float.sin 2.0*3.1415*440.0*Acc2*{Pow 2.0 D/12.0}/C} Acc2-1.0}
 			   end
 			end  
-			{Append {VecteurAudio nil C} {Mix Interprete B}}|{Mix Interprete T}
+			{Flatten {Append {VecteurAudio nil C} {Mix Interprete B}}|{Mix Interprete T}}
 		     end
 		  end
 	       [] Mono then
@@ -63,7 +63,7 @@ local Mix Interprete Projet CWD in
 			   end
 			end
 		   
-			{VecteurSilence nil C}|{Mix Interprete T}
+			{Flatten {VecteurSilence nil C}|{Mix Interprete T}}
 		   
 		     end
 		
@@ -72,11 +72,11 @@ local Mix Interprete Projet CWD in
 			C=S*44100.0
 			D={IntToFloat H}
 			fun{VecteurAudio Acc1 Acc2}
-			   if Acc2==0.0 then Acc1
-			   else {VecteurAudio 0.5*{Float.sin 2.0*3.1415*440.0*Acc2*{Pow 2.0 D/12.0}/C}|Acc1 Acc2-1.0}
+			   if Acc2==0.0 then {Reverse Acc1}
+			   else {VecteurAudio Acc1|0.5*{Float.sin 2.0*3.1415*440.0*Acc2*{Pow 2.0 D/12.0}/C} Acc2-1.0}
 			   end
 			end  
-			{VecteurAudio nil C}|{Mix Interprete T}
+			{Flatten {VecteurAudio nil C}|{Mix Interprete T}}
 		     end
 		  end
 	       end
@@ -265,7 +265,7 @@ local Mix Interprete Projet CWD in
 		     end
 		  end
 		  
-		  {VecteurSilence nil C}|{Mix Interprete T}
+		  {Flatten {VecteurSilence nil C}|{Mix Interprete T}|nil}
 		  
 	       end
 	       
@@ -278,7 +278,7 @@ local Mix Interprete Projet CWD in
 		     else {VecteurAudio 0.5*{Float.sin 2.0*3.1415*440.0*Acc2*{Pow 2.0 D/12.0}/C}|Acc1 Acc2-1.0}
 		     end
 		  end  
-		  {VecteurAudio nil C}|{Mix Interprete T}
+		  {Flatten {VecteurAudio nil C}|{Mix Interprete T}|nil}
 	       end
 	    end
 	    
@@ -428,7 +428,7 @@ local Mix Interprete Projet CWD in
    end
 
    local 
-      Music = {Projet.load CWD#'example.dj.oz'}
+      Music = {Projet.load CWD#'joie.dj.oz'}
    in
       % Votre code DOIT appeler Projet.run UNE SEULE fois.  Lors de cet appel,
       % vous devez mixer une musique qui démontre les fonctionalités de votre
